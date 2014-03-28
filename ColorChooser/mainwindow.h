@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "opencv2/core/core.hpp"
+#include "colordetector.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -21,11 +24,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-
-    void processImage(QString fileName);
-    void processKmean(QString filename);
-    QVector<QColor> kmeans(QString file, int clusters, int satThreshold);
-    QVector<QColor> kmeansFiltered(QString file, int clusters, int satThreshold);
+    ColorDetector colorDetector;
 
 };
 

@@ -24,8 +24,10 @@ win* {
 INCLUDEPATH += D:/Libraries/OpenCV-2.4.8/build/include
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+        colordetector.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+         colordetector.h
 
 FORMS    += mainwindow.ui
