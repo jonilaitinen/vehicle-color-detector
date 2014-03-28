@@ -26,26 +26,16 @@ void MainWindow::on_loadButton_clicked(){
     int satThreshold = ui->satSpinBox->value();
 
 
-    //QVector<QColor> colors = kmeans(fileName, clusters, satThreshold);
-
     std::string file = fileName.toUtf8().constData();
     QPixmap pixmap(fileName);
     ui->imageLabel->setPixmap(pixmap);
 
-    QVector<QColor> colors = colorDetector.kmeansFiltered(file, clusters, satThreshold);
-    QVector<QFrame*> frames;
-    frames.push_back(ui->color1);
-    frames.push_back(ui->color2);
-    frames.push_back(ui->color3);
-    frames.push_back(ui->color4);
-    frames.push_back(ui->color5);
+    QColor color = colorDetector.kmeansFiltered(file, clusters, satThreshold);
 
-    for(int i = 0; i < colors.size(); i++){
-        QPalette pal(palette());
-        pal.setColor(QPalette::Background, colors.at(i));
-        QFrame* frame = frames.at(i);
-        frame->setAutoFillBackground(true);
-        frame->setPalette(pal);
-    }
+    QPalette pal(palette());
+    pal.setColor(QPalette::Background, color);
+    QFrame* frame = ui->color1;
+    frame->setAutoFillBackground(true);
+    frame->setPalette(pal);
 
 }

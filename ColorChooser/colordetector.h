@@ -13,13 +13,14 @@ class ColorDetector : public QObject
 public:
     ColorDetector();
 
-    QVector<QColor> kmeansFiltered(std::string file, int clusters, int satThreshold);
+    QColor kmeansFiltered(std::string file, int clusters, int satThreshold);
 
     QVector<QColor> kmeansClustering(std::string file, int clusters, int satThreshold);
     QColor findMostCommonColor(QPixmap pixmap);
 
 private:
     cv::Mat saturationFilter(cv::Mat src, int satThreshold);
+    QColor chooseColor(QVector<QColor> clusters);
 
 };
 

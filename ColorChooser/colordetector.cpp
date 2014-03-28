@@ -10,12 +10,15 @@ ColorDetector::ColorDetector()
 {
 }
 
-QVector<QColor> ColorDetector::kmeansFiltered(std::string file, int clusters, int satThreshold){
+QColor ColorDetector::kmeansFiltered(std::string file, int clusters, int satThreshold){
 
     cv::Mat src = cv::imread(file);
 
     // take the bottom half of the rectangle
     src = src(cv::Rect(0, src.rows / 2, src.cols, src.rows / 2));
+
+    cv::blur(src, src, cv::Size(5, 5));
+    //cv::imshow("blurred", src);
 
     cv::Mat samples = saturationFilter(src, satThreshold);
 
@@ -37,7 +40,7 @@ QVector<QColor> ColorDetector::kmeansFiltered(std::string file, int clusters, in
        colors.push_back(QColor(r, g, b));
    }
 
-   return colors;
+   return chooseColor(colors);
 
 }
 
@@ -51,7 +54,7 @@ cv::Mat ColorDetector::saturationFilter(cv::Mat src, int satThreshold){
     cv::split(srcHSV, hsv_planes);
     cv::Mat saturation = hsv_planes[1];
 
-    imshow("sat", saturation);
+    //imshow("sat", saturation);
 
     QVector<cv::Vec3b> filtered;
 
@@ -59,7 +62,7 @@ cv::Mat ColorDetector::saturationFilter(cv::Mat src, int satThreshold){
     for( int y = 0; y < src.rows; y++ ){
         for( int x = 0; x < src.cols; x++ ){
             int pixel = saturation.at<unsigned char>(y, x);
-            if(pixel > satThreshold){
+            if(pixel > satThreshold || pixel < 2){
                 filtered.append(src.at<cv::Vec3b>(y,x));
             }
         }
@@ -74,6 +77,21 @@ cv::Mat ColorDetector::saturationFilter(cv::Mat src, int satThreshold){
     }
 
     return samples;
+}
+
+QColor ColorDetector::chooseColor(QVector<QColor> clusters){
+
+    int greatestSum = -1;
+    QColor selectColor;
+    for(int i = 0; i < clusters.length(); i++){
+        QColor color = clusters.at(i);
+        int sum = color.red() + color.green() + color.blue();
+        if(sum > greatestSum){
+            greatestSum = sum;
+            selectColor = color;
+        }
+    }
+    return selectColor;
 }
 
 QColor ColorDetector::findMostCommonColor(QPixmap pixmap){
