@@ -13,7 +13,7 @@ TEMPLATE = app
 
 # OpenCV
 win* {
-    LIBS += -LD:/Libraries/OpenCV-2.4.8/build/x86/vc10/lib \
+    LIBS += -L../opencv/build/x86/vc10/lib \
         -lopencv_core248 \
         -lopencv_highgui248 \
         -lopencv_calib3d248 \
@@ -21,7 +21,21 @@ win* {
         -lopencv_imgproc248
 }
 
-INCLUDEPATH += D:/Libraries/OpenCV-2.4.8/build/include
+macx {
+    LIBS += -L../opencv/build/osx/install/lib \
+        -L../opencv/build/osx/3rdparty/lib \
+        -lopencv_core \
+        -lopencv_highgui \
+        -lopencv_calib3d \
+        -lopencv_contrib \
+        -lopencv_imgproc \
+        -llibpng \
+        -llibjpeg \
+        -lzlib \
+        -framework AppKit
+}
+
+INCLUDEPATH += ../opencv/build/osx/install/include
 
 SOURCES += main.cpp\
         mainwindow.cpp \
