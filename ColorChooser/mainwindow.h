@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "opencv2/core/core.hpp"
+// #include "opencv2/core.hpp"
 #include "colordetector.h"
 
 namespace Ui {
@@ -20,6 +20,7 @@ public:
 
 private slots:
     void on_loadButton_clicked();
+    
 
 private:
     Ui::MainWindow *ui;

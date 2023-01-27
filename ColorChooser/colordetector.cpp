@@ -3,8 +3,8 @@
 #include <QDebug>
 #include <QPixmap>
 
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
 
 ColorDetector::ColorDetector()
 {
@@ -27,7 +27,7 @@ QColor ColorDetector::kmeansFiltered(std::string file, int clusters, int satThre
     int attempts = 5;
     cv::Mat centers;
     cv::kmeans(samples, clusters, labels,
-               cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10, 0.1),
+               cv::TermCriteria(cv::TermCriteria::MAX_ITER|cv::TermCriteria::EPS , 10, 0.1),
                attempts, cv::KMEANS_PP_CENTERS, centers);
 
    QVector<QColor> colors;
@@ -48,7 +48,7 @@ cv::Mat ColorDetector::saturationFilter(cv::Mat src, int satThreshold){
 
     cv::Mat srcHSV;
     // filter by saturation
-    cv::cvtColor(src, srcHSV, CV_BGR2HSV);
+    cv::cvtColor(src, srcHSV, cv::COLOR_BGR2HSV);
 
     std::vector<cv::Mat> hsv_planes;
     cv::split(srcHSV, hsv_planes);
@@ -132,7 +132,7 @@ QVector<QColor> ColorDetector::kmeansClustering(std::string file, int clusters, 
     src = src(cv::Rect(0, src.rows / 2, src.cols, src.rows / 2));
     cv::Mat srcHSV;
     // filter by saturation
-    cv::cvtColor(src, srcHSV, CV_BGR2HSV);
+    cv::cvtColor(src, srcHSV, cv::COLOR_BGR2HSV);
 
     std::vector<cv::Mat> hsv_planes;
     cv::split(srcHSV, hsv_planes);
@@ -168,7 +168,7 @@ QVector<QColor> ColorDetector::kmeansClustering(std::string file, int clusters, 
     int attempts = 5;
     cv::Mat centers;
     cv::kmeans(samples, clusters, labels,
-               cv::TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10, 0.1),
+               cv::TermCriteria(cv::TermCriteria::MAX_ITER|cv::TermCriteria::EPS , 10, 0.1),
                attempts, cv::KMEANS_PP_CENTERS, centers);
 
     cv::Mat new_image( src.size(), src.type() );
